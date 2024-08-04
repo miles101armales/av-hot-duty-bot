@@ -9,11 +9,16 @@ export interface MySession extends Scenes.WizardSession<MyWizardSession> {
   // will be available under `ctx.session.mySessionProp`
   mySessionProp: number;
 
-  chat_id: string;
+  chat_id: number;
   username: string;
   phone: string;
   name: string;
-  symbol: string;
+  selectedDays: any;
+  selectedManager: any;
+  selectedMonth: any;
+  selectedMonthIndex: any;
+  page: number;
+  groupedDuties: any;
 }
 
 export interface MyContext extends Context {

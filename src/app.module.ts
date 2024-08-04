@@ -5,6 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ManagersModule } from './managers/managers.module';
 import { HotManager } from './managers/entities/manager.entity';
+import { DutiesModule } from './duties/duties.module';
+import { Duty } from './duties/entities/duty.entity';
 
 @Module({
   imports: [
@@ -19,11 +21,12 @@ import { HotManager } from './managers/entities/manager.entity';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         synchronize: true,
-        entities: [HotManager],
+        entities: [HotManager, Duty],
       }),
       inject: [ConfigService],
     }),
     ManagersModule,
+    DutiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

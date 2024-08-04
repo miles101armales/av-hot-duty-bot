@@ -28,6 +28,8 @@ export class StartCommand extends Command {
         role: 'manager',
       };
 
+      ctx.session.chat_id = ctx.chat.id;
+
       const existedClient = await this.managersRepository.findOne({
         where: { chat_id: ctx.chat.id },
       });
