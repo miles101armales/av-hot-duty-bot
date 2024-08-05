@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Telegraf, Scenes, session } from 'telegraf';
+import { Telegraf, Scenes } from 'telegraf';
 import { MyContext } from './helpers/interfaces/context.interface';
 import { Command } from './helpers/classes/command.class';
 import { Scene } from './helpers/classes/scene.class';
@@ -14,6 +14,7 @@ import { EditScheduleScene } from './scenes/edit_schedule.scene';
 import { reply_start_admin } from './helpers/constants';
 import * as LocalSession from 'telegraf-session-local';
 import { Cron } from '@nestjs/schedule';
+import { Deal } from './helpers/interfaces/deal.interface';
 
 @Injectable()
 export class AppService {
@@ -23,6 +24,7 @@ export class AppService {
   private scenesNames: Scenes.WizardScene<MyContext>[] = [];
   public updatedTime: string;
   public managerName: string;
+  public dutyChatId: number;
 
   private readonly logger = new Logger(AppService.name);
 
@@ -77,6 +79,7 @@ export class AppService {
         return ctx.reply('Выберите комманду', reply_start_admin);
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this.client.command('test', (ctx) => {
         this.sendNotificationAboutDuty();
         this.sendNotificationAboutTomorrowDuty();
@@ -111,6 +114,7 @@ export class AppService {
         where: { managerName: duty.managerName },
       });
       chat_ids.push(manager.chat_id);
+      this.dutyChatId = manager.chat_id;
     }
 
     for (const chatId of chat_ids) {
@@ -148,5 +152,18 @@ export class AppService {
         `Привет ${manager.managerName}. Завтра день твоего дежурства! Будь на готове.`,
       );
     }
+  }
+
+  async sendNotificationAboutNewDeal(deal: Deal) {
+    const replytext =
+      `Открыт новый заказ! Информация:\n\n` +
+      `Номер заказа: <b>${deal.number}</b>\n` +
+      `Состав заказа: <b>${deal.positions}</b>\n` +
+      `Стоимость заказа: <b>${deal.cost_money}</b>\n` +
+      `Пользователь: <b>${deal.user}</b>\n` +
+      `Номер телефона: <b>${deal.phone}</b>\n\n` +
+      `Ссылка на заказ: https://azatvaleev.getcourse.ru/sales/control/deal/update/id/${deal.id}\n\n`;
+
+    return this.client.telegram.sendMessage(this.dutyChatId, replytext);
   }
 }
