@@ -19,33 +19,41 @@ export class StartCommand extends Command {
   }
   handle() {
     this.client.start(async (ctx) => {
-      const newClient: CreateManagerDto = {
-        username: ctx.from.username,
-        name: ctx.from.first_name,
-        chat_id: ctx.chat.id,
-        managerName: '',
-        duty: {},
-        role: 'manager',
-      };
-
-      ctx.session.chat_id = ctx.chat.id;
-
-      const existedClient = await this.managersRepository.findOne({
-        where: { chat_id: ctx.chat.id },
-      });
-
-      if (!existedClient) {
-        this.logger.log('Create new user: ' + ctx.from.username);
-        await this.managersRepository.save(newClient);
-        ctx.reply('Выберите комманду', reply_start_manager);
-      } else {
-        this.logger.log('Start command initialized by ' + ctx.from.username);
-        if (existedClient.role == 'admin') {
-          ctx.reply('Выберите комманду', reply_start_admin);
-        } else {
-          ctx.reply('Выберите комманду', reply_start_manager);
-        }
-      }
+      return this.handled(ctx);
     });
+
+    this.client.action('menu', async (ctx) => {
+      return this.handled(ctx);
+    });
+  }
+
+  async handled(ctx) {
+    const newClient: CreateManagerDto = {
+      username: ctx.from.username,
+      name: ctx.from.first_name,
+      chat_id: ctx.chat.id,
+      managerName: '',
+      duty: {},
+      role: 'manager',
+    };
+
+    ctx.session.chat_id = ctx.chat.id;
+
+    const existedClient = await this.managersRepository.findOne({
+      where: { chat_id: ctx.chat.id },
+    });
+
+    if (!existedClient) {
+      this.logger.log('Create new user: ' + ctx.from.username);
+      await this.managersRepository.save(newClient);
+      ctx.reply('Выберите комманду', reply_start_manager);
+    } else {
+      this.logger.log('Start command initialized by ' + ctx.from.username);
+      if (existedClient.role == 'admin') {
+        ctx.reply('Выберите комманду', reply_start_admin);
+      } else {
+        ctx.reply('Выберите комманду', reply_start_manager);
+      }
+    }
   }
 }

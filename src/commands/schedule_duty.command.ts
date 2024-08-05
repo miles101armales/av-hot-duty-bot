@@ -97,7 +97,7 @@ export class ScheduleCommand extends Command {
       return ctx.reply('Дежурств нет');
     }
 
-    const displayDuties = duties.slice(0, 7);
+    const displayDuties = duties;
     const dutyText = displayDuties
       .map((duty) => `${duty.managerName} -> ${duty.formattedDate}`)
       .join('\n');
@@ -120,6 +120,7 @@ export class ScheduleCommand extends Command {
             { text: '<-', callback_data: `schedule_page_${page - 1}` },
             { text: '->', callback_data: `schedule_page_${page + 1}` },
           ],
+          [{ text: 'Вернуться в меню', callback_data: 'menu' }],
         ],
       },
     });
