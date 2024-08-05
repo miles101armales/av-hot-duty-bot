@@ -194,6 +194,7 @@ export class EditScheduleScene extends Scene {
           text: manager.managerName,
           callback_data: `manager_${manager.managerName}`,
         }));
+        managerButtons.push({ text: 'Вернуться в меню', callback_data: 'menu' })
         await ctx.reply('Выберите менеджера:', {
           reply_markup: {
             inline_keyboard: managerButtons.map((button) => [button]),

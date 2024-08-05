@@ -99,7 +99,7 @@ export class ScheduleCommand extends Command {
 
     const displayDuties = duties;
     const dutyText = displayDuties
-      .map((duty) => `${duty.managerName} -> ${duty.formattedDate}`)
+      .map((duty) => `<code>${duty.managerName}</code> -> <b>${duty.formattedDate}</b>`)
       .join('\n');
 
     const replyText = `${monthNames[page]}:\n${dutyText}`;
@@ -123,6 +123,7 @@ export class ScheduleCommand extends Command {
           [{ text: 'Вернуться в меню', callback_data: 'menu' }],
         ],
       },
+      parse_mode: 'HTML'
     });
   }
 }

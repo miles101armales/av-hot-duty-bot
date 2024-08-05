@@ -164,6 +164,6 @@ export class AppService {
       `Номер телефона: <b>${deal.phone}</b>\n\n` +
       `Ссылка на заказ: https://azatvaleev.getcourse.ru/sales/control/deal/update/id/${deal.id}\n\n`;
 
-    return this.client.telegram.sendMessage(this.dutyChatId, replytext);
+    return this.client.telegram.sendMessage(416018817, replytext, {parse_mode: 'HTML'});
   }
 }

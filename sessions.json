@@ -4,7 +4,11 @@
       "id": "416018817:416018817",
       "data": {
         "chat_id": 416018817,
-        "__scenes": {},
+        "__scenes": {
+          "current": "edit",
+          "state": {},
+          "cursor": 1
+        },
         "selectedManager": "Арман",
         "selectedMonth": "Август",
         "selectedMonthIndex": "8",
@@ -15,74 +19,146 @@
         "groupedDuties": {
           "Август": [
             {
-              "managerName": "Арман",
-              "formattedDate": "3 август"
-            },
-            {
-              "managerName": "Арман",
-              "formattedDate": "3 август"
-            },
-            {
-              "managerName": "Арман",
-              "formattedDate": "3 август"
-            },
-            {
-              "managerName": "Арман",
-              "formattedDate": "3 август"
-            },
-            {
-              "managerName": "Арман",
-              "formattedDate": "6 август"
-            },
-            {
-              "managerName": "Арман",
-              "formattedDate": "6 август"
-            },
-            {
-              "managerName": "Анастатися",
+              "managerName": "Алина",
               "formattedDate": "7 август"
             },
             {
-              "managerName": "Анастатися",
-              "formattedDate": "7 август"
+              "managerName": "Антон",
+              "formattedDate": "8 август"
             },
             {
-              "managerName": "Арман",
+              "managerName": "Галина",
+              "formattedDate": "9 август"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "10 август"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "11 август"
+            },
+            {
+              "managerName": "Лиана",
               "formattedDate": "12 август"
             },
             {
-              "managerName": "Арман",
-              "formattedDate": "12 август"
+              "managerName": "Алина",
+              "formattedDate": "13 август"
             },
             {
-              "managerName": "Арман",
+              "managerName": "Антон",
               "formattedDate": "14 август"
             },
             {
-              "managerName": "Арман",
-              "formattedDate": "14 август"
+              "managerName": "Галина",
+              "formattedDate": "15 август"
             },
             {
-              "managerName": "Арман",
+              "managerName": "Роза",
+              "formattedDate": "16 август"
+            },
+            {
+              "managerName": "Гузель",
               "formattedDate": "17 август"
             },
             {
-              "managerName": "Арман",
-              "formattedDate": "17 август"
+              "managerName": "Лиана",
+              "formattedDate": "18 август"
             },
             {
-              "managerName": "Арман",
+              "managerName": "Алина",
+              "formattedDate": "19 август"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "20 август"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "21 август"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "22 август"
+            },
+            {
+              "managerName": "Гузель",
               "formattedDate": "23 август"
             },
             {
-              "managerName": "Арман",
-              "formattedDate": "23 август"
+              "managerName": "Лиана",
+              "formattedDate": "24 август"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "25 август"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "26 август"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "27 август"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "28 август"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "29 август"
+            },
+            {
+              "managerName": "Лиана",
+              "formattedDate": "30 август"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "31 август"
             }
           ],
           "Сентябрь": [
             {
-              "managerName": "Анастасия",
-              "formattedDate": "12 сентябрь"
+              "managerName": "Антон",
+              "formattedDate": "1 сентябрь"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "2 сентябрь"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "3 сентябрь"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "4 сентябрь"
+            },
+            {
+              "managerName": "Лиана",
+              "formattedDate": "5 сентябрь"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "6 сентябрь"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "7 сентябрь"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "8 сентябрь"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "9 сентябрь"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "10 сентябрь"
             }
           ]
         }
@@ -91,7 +167,154 @@
     {
       "id": "1810423951:1810423951",
       "data": {
-        "__scenes": {}
+        "__scenes": {},
+        "chat_id": 1810423951,
+        "groupedDuties": {
+          "Август": [
+            {
+              "managerName": "Алина",
+              "formattedDate": "7 август"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "8 август"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "9 август"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "10 август"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "11 август"
+            },
+            {
+              "managerName": "Лиана",
+              "formattedDate": "12 август"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "13 август"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "14 август"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "15 август"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "16 август"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "17 август"
+            },
+            {
+              "managerName": "Лиана",
+              "formattedDate": "18 август"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "19 август"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "20 август"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "21 август"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "22 август"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "23 август"
+            },
+            {
+              "managerName": "Лиана",
+              "formattedDate": "24 август"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "25 август"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "26 август"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "27 август"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "28 август"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "29 август"
+            },
+            {
+              "managerName": "Лиана",
+              "formattedDate": "30 август"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "31 август"
+            }
+          ],
+          "Сентябрь": [
+            {
+              "managerName": "Антон",
+              "formattedDate": "1 сентябрь"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "2 сентябрь"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "3 сентябрь"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "4 сентябрь"
+            },
+            {
+              "managerName": "Лиана",
+              "formattedDate": "5 сентябрь"
+            },
+            {
+              "managerName": "Алина",
+              "formattedDate": "6 сентябрь"
+            },
+            {
+              "managerName": "Антон",
+              "formattedDate": "7 сентябрь"
+            },
+            {
+              "managerName": "Галина",
+              "formattedDate": "8 сентябрь"
+            },
+            {
+              "managerName": "Роза",
+              "formattedDate": "9 сентябрь"
+            },
+            {
+              "managerName": "Гузель",
+              "formattedDate": "10 сентябрь"
+            }
+          ]
+        }
       }
     }
   ]
