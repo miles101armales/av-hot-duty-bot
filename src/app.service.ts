@@ -13,6 +13,7 @@ import { Duty } from './duties/entities/duty.entity';
 import { EditScheduleScene } from './scenes/edit_schedule.scene';
 import { reply_start_admin } from './helpers/constants';
 import * as LocalSession from 'telegraf-session-local';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class AppService {
@@ -76,6 +77,11 @@ export class AppService {
         return ctx.reply('Выберите комманду', reply_start_admin);
       });
 
+      this.client.command('test', (ctx) => {
+        this.sendNotificationAboutDuty();
+        this.sendNotificationAboutTomorrowDuty();
+      });
+
       this.client.action('edit_duty', async (ctx) => {
         this.logger.log(
           'Edit Schedule Command initialized by ' + ctx.from.username,
@@ -84,6 +90,63 @@ export class AppService {
       });
     } catch (error) {
       this.logger.error('Error initializing bot', error);
+    }
+  }
+
+  @Cron('* 3 * * *')
+  async sendNotificationAboutDuty() {
+    const currentDay = new Date().toISOString().split('T')[0].split('-')[2]; //получаем текущую дату в корректном формате
+    const chat_ids = [];
+    let manager: HotManager;
+
+    const duties = await this.dutyRepository
+      .createQueryBuilder('duty')
+      .where('EXTRACT(DAY FROM duty.date) = :day', {
+        day: currentDay,
+      })
+      .getMany();
+
+    for (const duty of duties) {
+      manager = await this.managersRepository.findOne({
+        where: { managerName: duty.managerName },
+      });
+      chat_ids.push(manager.chat_id);
+    }
+
+    for (const chatId of chat_ids) {
+      return this.client.telegram.sendMessage(
+        chatId,
+        `Привет ${manager.managerName}. Сегодня день твоего дежурства! Будь на готове.`,
+      );
+    }
+  }
+
+  @Cron('* 15 * * *')
+  async sendNotificationAboutTomorrowDuty() {
+    const currentDay = new Date().toISOString().split('T')[0].split('-')[2]; //получаем текущую дату в корректном формате
+    const chat_ids = [];
+    let manager: HotManager;
+
+    const duties = await this.dutyRepository
+      .createQueryBuilder('duty')
+      .where('EXTRACT(DAY FROM duty.date) = :day', {
+        day: '0' + (Number(currentDay) + 1),
+      })
+      .getMany();
+
+    for (const duty of duties) {
+      console.log(duty);
+      manager = await this.managersRepository.findOne({
+        where: { managerName: duty.managerName },
+      });
+      chat_ids.push(manager.chat_id);
+    }
+
+    for (const chatId of chat_ids) {
+      return this.client.telegram.sendMessage(
+        chatId,
+        `Привет ${manager.managerName}. Завтра день твоего дежурства! Будь на готове.`,
+      );
     }
   }
 }
