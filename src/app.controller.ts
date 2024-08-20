@@ -1,6 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Deal } from './helpers/interfaces/deal.interface';
+import { Cron } from '@nestjs/schedule';
 
 @Controller()
 export class AppController {
@@ -25,5 +26,15 @@ export class AppController {
     };
 
     return this.appService.sendNotificationAboutNewDeal(newDeal);
+  }
+
+  @Cron('* 3 * * *')
+  async sendNotificationAboutDuty() {
+    return this.appService.sendNotificationAboutDuty();
+  }
+
+  @Cron('* 15 * * *')
+  async sendNotificationAboutTomorrowDuty() {
+    return this.appService.sendNotificationAboutTomorrowDuty();
   }
 }

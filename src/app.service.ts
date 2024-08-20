@@ -96,16 +96,18 @@ export class AppService {
     }
   }
 
-  @Cron('* 3 * * *')
+  
   async sendNotificationAboutDuty() {
     const currentDay = new Date().toISOString().split('T')[0].split('-')[2]; //получаем текущую дату в корректном формате
+    const currentMonth = new Date().getMonth()
     const chat_ids = [];
     let manager: HotManager;
 
     const duties = await this.dutyRepository
       .createQueryBuilder('duty')
-      .where('EXTRACT(DAY FROM duty.date) = :day', {
+      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
         day: currentDay,
+        month: currentMonth + 1
       })
       .getMany();
 
@@ -125,19 +127,24 @@ export class AppService {
     }
   }
 
-  @Cron('* 15 * * *')
+  
   async sendNotificationAboutTomorrowDuty() {
-    const currentDay = new Date().toISOString().split('T')[0].split('-')[2]; //получаем текущую дату в корректном формате
+    const currentDay = new Date().getDate(); //получаем текущую дату в корректном формате
+    const currentMonth = new Date().getMonth()
     const chat_ids = [];
     let manager: HotManager;
 
+    const nextDay = currentDay + 1;
+    console.log(nextDay, currentMonth)
     const duties = await this.dutyRepository
       .createQueryBuilder('duty')
-      .where('EXTRACT(DAY FROM duty.date) = :day', {
-        day: '0' + (Number(currentDay) + 1),
+      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
+        day: nextDay,
+        month: currentMonth + 1
       })
       .getMany();
 
+      console.log(duties)
     for (const duty of duties) {
       console.log(duty);
       manager = await this.managersRepository.findOne({
@@ -164,6 +171,6 @@ export class AppService {
       `Номер телефона: <b>${deal.phone}</b>\n\n` +
       `Ссылка на заказ: https://azatvaleev.getcourse.ru/sales/control/deal/update/id/${deal.id}\n\n`;
 
-    return this.client.telegram.sendMessage(416018817, replytext, {parse_mode: 'HTML'});
+    return this.client.telegram.sendMessage(this.dutyChatId, replytext, {parse_mode: 'HTML'});
   }
 }
