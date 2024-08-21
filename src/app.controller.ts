@@ -29,11 +29,13 @@ export class AppController {
   }
 
   @Cron('0 3 * * *')
+  @Get('1')
   async sendNotificationAboutDuty() {
     return this.appService.sendNotificationAboutDuty();
   }
 
   @Cron('0 15 * * *')
+  @Get('2')
   async sendNotificationAboutTomorrowDuty() {
     return this.appService.sendNotificationAboutTomorrowDuty();
   }

@@ -125,6 +125,7 @@ export class AppService {
     }
 
     for (const chatId of chat_ids) {
+      this.client.telegram.sendMessage(416018817, 'Уведомление отправлено')
       return this.client.telegram.sendMessage(
         chatId,
         `Привет ${manager.managerName}. Сегодня день твоего дежурства! Будь на готове.`,
@@ -182,6 +183,7 @@ export class AppService {
     }
 
     for (const chatId of chat_ids) {
+      this.client.telegram.sendMessage(416018817, 'Уведомление отправлено')
       return this.client.telegram.sendMessage(
         chatId,
         `Привет ${manager.managerName}. Завтра день твоего дежурства! Будь на готове.`,
