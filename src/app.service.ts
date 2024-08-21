@@ -13,7 +13,6 @@ import { Duty } from './duties/entities/duty.entity';
 import { EditScheduleScene } from './scenes/edit_schedule.scene';
 import { reply_start_admin } from './helpers/constants';
 import * as LocalSession from 'telegraf-session-local';
-import { Cron } from '@nestjs/schedule';
 import { Deal } from './helpers/interfaces/deal.interface';
 
 @Injectable()
@@ -93,27 +92,34 @@ export class AppService {
       });
 
       this.client.catch((err, ctx) => {
-        ctx.reply('Похоже возникла ошибка, я уже работаю над ней. Перезапусти бота командой /start')
-        ctx.telegram.sendMessage(416018817, `@${ctx.from.username} получил ошибку\n\n${err}`)
-      })
+        ctx.reply(
+          'Похоже возникла ошибка, я уже работаю над ней. Перезапусти бота командой /start',
+        );
+        ctx.telegram.sendMessage(
+          416018817,
+          `@${ctx.from.username} получил ошибку\n\n${err}`,
+        );
+      });
     } catch (error) {
       this.logger.error('Error initializing bot', error);
     }
   }
 
-  
   async sendNotificationAboutDuty() {
     const currentDay = new Date().toISOString().split('T')[0].split('-')[2]; //получаем текущую дату в корректном формате
-    const currentMonth = new Date().getMonth()
+    const currentMonth = new Date().getMonth();
     const chat_ids = [];
     let manager: HotManager;
 
     const duties = await this.dutyRepository
       .createQueryBuilder('duty')
-      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
-        day: currentDay,
-        month: currentMonth + 1
-      })
+      .where(
+        'EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month',
+        {
+          day: currentDay,
+          month: currentMonth + 1,
+        },
+      )
       .getMany();
 
     for (const duty of duties) {
@@ -125,7 +131,7 @@ export class AppService {
     }
 
     for (const chatId of chat_ids) {
-      this.client.telegram.sendMessage(416018817, 'Уведомление отправлено')
+      this.client.telegram.sendMessage(416018817, 'Уведомление отправлено');
       return this.client.telegram.sendMessage(
         chatId,
         `Привет ${manager.managerName}. Сегодня день твоего дежурства! Будь на готове.`,
@@ -135,16 +141,19 @@ export class AppService {
 
   async sendTestNotificationAboutDuty() {
     const currentDay = new Date().toISOString().split('T')[0].split('-')[2]; //получаем текущую дату в корректном формате
-    const currentMonth = new Date().getMonth()
+    const currentMonth = new Date().getMonth();
     const chat_ids = [];
     let manager: HotManager;
 
     const duties = await this.dutyRepository
       .createQueryBuilder('duty')
-      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
-        day: currentDay,
-        month: currentMonth + 1
-      })
+      .where(
+        'EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month',
+        {
+          day: currentDay,
+          month: currentMonth + 1,
+        },
+      )
       .getMany();
 
     for (const duty of duties) {
@@ -156,24 +165,26 @@ export class AppService {
     }
   }
 
-  
   async sendNotificationAboutTomorrowDuty() {
     const currentDay = new Date().getDate(); //получаем текущую дату в корректном формате
-    const currentMonth = new Date().getMonth()
+    const currentMonth = new Date().getMonth();
     const chat_ids = [];
     let manager: HotManager;
 
     const nextDay = currentDay + 1;
-    console.log(nextDay, currentMonth)
+    console.log(nextDay, currentMonth);
     const duties = await this.dutyRepository
       .createQueryBuilder('duty')
-      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
-        day: nextDay,
-        month: currentMonth + 1
-      })
+      .where(
+        'EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month',
+        {
+          day: nextDay,
+          month: currentMonth + 1,
+        },
+      )
       .getMany();
 
-      console.log(duties)
+    console.log(duties);
     for (const duty of duties) {
       console.log(duty);
       manager = await this.managersRepository.findOne({
@@ -183,7 +194,10 @@ export class AppService {
     }
 
     for (const chatId of chat_ids) {
-      this.client.telegram.sendMessage(416018817, 'Уведомление отправлено')
+      this.client.telegram.sendMessage(
+        416018817,
+        'Уведомление отправлено на завтра',
+      );
       return this.client.telegram.sendMessage(
         chatId,
         `Привет ${manager.managerName}. Завтра день твоего дежурства! Будь на готове.`,
@@ -193,21 +207,24 @@ export class AppService {
 
   async sendTestNotificationAboutTomorrowDuty() {
     const currentDay = new Date().getDate(); //получаем текущую дату в корректном формате
-    const currentMonth = new Date().getMonth()
+    const currentMonth = new Date().getMonth();
     const chat_ids = [];
     let manager: HotManager;
 
     const nextDay = currentDay + 1;
-    console.log(nextDay, currentMonth)
+    console.log(nextDay, currentMonth);
     const duties = await this.dutyRepository
       .createQueryBuilder('duty')
-      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
-        day: nextDay,
-        month: currentMonth + 1
-      })
+      .where(
+        'EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month',
+        {
+          day: nextDay,
+          month: currentMonth + 1,
+        },
+      )
       .getMany();
 
-      console.log(duties)
+    console.log(duties);
     for (const duty of duties) {
       console.log(duty);
       manager = await this.managersRepository.findOne({
@@ -227,6 +244,8 @@ export class AppService {
       `Номер телефона: <b>${deal.phone}</b>\n\n` +
       `Ссылка на заказ: https://azatvaleev.getcourse.ru/sales/control/deal/update/id/${deal.id}\n\n`;
 
-    return this.client.telegram.sendMessage(this.dutyChatId, replytext, {parse_mode: 'HTML'});
+    return this.client.telegram.sendMessage(this.dutyChatId, replytext, {
+      parse_mode: 'HTML',
+    });
   }
 }

@@ -7,6 +7,7 @@ import { ManagersModule } from './managers/managers.module';
 import { HotManager } from './managers/entities/manager.entity';
 import { DutiesModule } from './duties/duties.module';
 import { Duty } from './duties/entities/duty.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { Duty } from './duties/entities/duty.entity';
     }),
     ManagersModule,
     DutiesModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],
