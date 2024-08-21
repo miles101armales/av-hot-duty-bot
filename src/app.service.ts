@@ -81,8 +81,8 @@ export class AppService {
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this.client.command('test', (ctx) => {
-        this.sendNotificationAboutDuty();
-        this.sendNotificationAboutTomorrowDuty();
+        this.sendTestNotificationAboutDuty();
+        this.sendTestNotificationAboutTomorrowDuty();
       });
 
       this.client.action('edit_duty', async (ctx) => {
@@ -91,6 +91,11 @@ export class AppService {
         );
         ctx.scene.enter('edit');
       });
+
+      this.client.catch((err, ctx) => {
+        ctx.reply('Похоже возникла ошибка, я уже работаю над ней. Перезапусти бота командой /start')
+        ctx.telegram.sendMessage(416018817, `@${ctx.from.username} получил ошибку\n\n${err}`)
+      })
     } catch (error) {
       this.logger.error('Error initializing bot', error);
     }
@@ -127,6 +132,29 @@ export class AppService {
     }
   }
 
+  async sendTestNotificationAboutDuty() {
+    const currentDay = new Date().toISOString().split('T')[0].split('-')[2]; //получаем текущую дату в корректном формате
+    const currentMonth = new Date().getMonth()
+    const chat_ids = [];
+    let manager: HotManager;
+
+    const duties = await this.dutyRepository
+      .createQueryBuilder('duty')
+      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
+        day: currentDay,
+        month: currentMonth + 1
+      })
+      .getMany();
+
+    for (const duty of duties) {
+      manager = await this.managersRepository.findOne({
+        where: { managerName: duty.managerName },
+      });
+      chat_ids.push(manager.chat_id);
+      this.dutyChatId = manager.chat_id;
+    }
+  }
+
   
   async sendNotificationAboutTomorrowDuty() {
     const currentDay = new Date().getDate(); //получаем текущую дату в корректном формате
@@ -158,6 +186,32 @@ export class AppService {
         chatId,
         `Привет ${manager.managerName}. Завтра день твоего дежурства! Будь на готове.`,
       );
+    }
+  }
+
+  async sendTestNotificationAboutTomorrowDuty() {
+    const currentDay = new Date().getDate(); //получаем текущую дату в корректном формате
+    const currentMonth = new Date().getMonth()
+    const chat_ids = [];
+    let manager: HotManager;
+
+    const nextDay = currentDay + 1;
+    console.log(nextDay, currentMonth)
+    const duties = await this.dutyRepository
+      .createQueryBuilder('duty')
+      .where('EXTRACT(DAY FROM duty.date) = :day AND EXTRACT(MONTH FROM duty.date) = :month', {
+        day: nextDay,
+        month: currentMonth + 1
+      })
+      .getMany();
+
+      console.log(duties)
+    for (const duty of duties) {
+      console.log(duty);
+      manager = await this.managersRepository.findOne({
+        where: { managerName: duty.managerName },
+      });
+      chat_ids.push(manager.chat_id);
     }
   }
 
