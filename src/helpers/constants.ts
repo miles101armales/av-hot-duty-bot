@@ -9,8 +9,6 @@ export const reply_start_admin = {
 
 export const reply_start_manager = {
   reply_markup: {
-    inline_keyboard: [
-      [{ text: 'Мои дежурства', callback_data: 'schedule_duty' }],
-    ],
+    inline_keyboard: [[{ text: 'Мои дежурства', callback_data: 'my_duties' }]],
   },
 };
