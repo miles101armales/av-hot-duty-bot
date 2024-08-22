@@ -18,7 +18,7 @@ export interface MySession extends Scenes.WizardSession<MyWizardSession> {
   selectedMonth: any;
   selectedMonthIndex: any;
   page: number;
-  groupedDuties: any;
+  duties: any;
 }
 
 export interface MyContext extends Context {

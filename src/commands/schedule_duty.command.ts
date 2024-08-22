@@ -34,96 +34,88 @@ export class ScheduleCommand extends Command {
         return ctx.reply('Дежурств нет');
       }
 
-      // Group duties by month
-      const groupedDuties = this.groupDutiesByMonth(duties);
+      // Сохраняем все дежурства в сессии
+      ctx.session.duties = this.formatDuties(duties);
 
-      ctx.session.groupedDuties = groupedDuties;
-
-      // Send the first page
+      // Отправляем первую страницу
       this.sendDutyPage(ctx, 0);
     });
 
-    // Handle pagination actions
+    // Обрабатываем действия для пагинации
     this.client.action(/schedule_page_(\d+)/, async (ctx) => {
       const page = parseInt(ctx.match[1], 10);
       this.sendDutyPage(ctx, page);
     });
   }
 
-  private groupDutiesByMonth(duties: Duty[]): {
-    [key: string]: FormattedDuty[];
-  } {
-    const monthNames = [
-      'Январь',
-      'Февраль',
-      'Март',
-      'Апрель',
-      'Май',
-      'Июнь',
-      'Июль',
-      'Август',
-      'Сентябрь',
-      'Октябрь',
-      'Ноябрь',
-      'Декабрь',
-    ];
-
-    const grouped: { [key: string]: FormattedDuty[] } = {};
-
-    duties.forEach((duty) => {
+  private formatDuties(duties: Duty[]): FormattedDuty[] {
+    return duties.map((duty) => {
       const date = new Date(duty.date);
-      const month = monthNames[date.getMonth()];
       const day = date.getDate();
+      const month = date.toLocaleString('ru-RU', { month: 'long' });
 
-      if (!grouped[month]) {
-        grouped[month] = [];
-      }
-
-      grouped[month].push({
+      return {
         managerName: duty.managerName,
         formattedDate: `${day} ${month.toLowerCase()}`,
-      });
+      };
     });
-
-    return grouped;
   }
 
   private sendDutyPage(ctx: MyContext, page: number) {
-    const groupedDuties = ctx.session.groupedDuties;
-    const monthNames = Object.keys(groupedDuties);
-    const duties = groupedDuties[monthNames[page]];
+    const duties = ctx.session.duties;
+    const pageSize = 9;
+    const startIndex = page * pageSize;
+    const pageDuties = duties.slice(startIndex, startIndex + pageSize);
 
-    if (!duties || duties.length === 0) {
+    if (pageDuties.length === 0) {
       return ctx.reply('Дежурств нет');
     }
 
-    const displayDuties = duties;
-    const dutyText = displayDuties
-      .map((duty) => `<code>${duty.managerName}</code> -> <b>${duty.formattedDate}</b>`)
-      .join('\n');
+    let replyText: string;
 
-    const replyText = `${monthNames[page]}:\n${dutyText}`;
+    if (page === 0) {
+      // Определяем дежурных на сегодня, завтра и следующие 7 дней
+      const todayDuty = pageDuties[0];
+      const tomorrowDuty = pageDuties[1];
+      const nextSevenDaysDuties = pageDuties.slice(2, 9);
 
-    // Create pagination buttons
+      const todayText = `Дежурный сегодня: <code>${todayDuty.managerName}</code>`;
+      const tomorrowText = `Дежурный завтра: <code>${tomorrowDuty.managerName}</code>`;
+      const nextSevenDaysText = nextSevenDaysDuties
+        .map(
+          (duty) =>
+            `<code>${duty.managerName}</code> -> <b>${duty.formattedDate}</b>`,
+        )
+        .join('\n');
+
+      replyText = `${todayDuty.formattedDate.split(' ')[1]}:\n\n${todayText}\n${tomorrowText}\n\nДежурные на следующие 7 дней:\n${nextSevenDaysText}`;
+    } else {
+      // Для последующих страниц показываем только список дежурств
+      replyText = pageDuties
+        .map(
+          (duty) =>
+            `<code>${duty.managerName}</code> -> <b>${duty.formattedDate}</b>`,
+        )
+        .join('\n');
+    }
+
+    // Создаем кнопки для пагинации
     const buttons = [];
-    if (page > 0) {
+    if (startIndex > 0) {
       buttons.push({ text: '<-', callback_data: `schedule_page_${page - 1}` });
     }
-    if (page < monthNames.length - 1) {
+    if (startIndex + pageSize < duties.length) {
       buttons.push({ text: '->', callback_data: `schedule_page_${page + 1}` });
     }
 
     ctx.reply(replyText, {
       reply_markup: {
         inline_keyboard: [
-          [
-            { text: '<-', callback_data: `schedule_page_${page - 1}` },
-            { text: '->', callback_data: `schedule_page_${page + 1}` },
-          ],
+          buttons,
           [{ text: 'Вернуться в меню', callback_data: 'menu' }],
         ],
       },
-      parse_mode: 'HTML'
+      parse_mode: 'HTML',
     });
   }
 }
